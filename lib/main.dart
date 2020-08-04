@@ -239,6 +239,7 @@ class _BasicSqlState extends State<BasicSql> {
     getDataFromDb();
   }
 
+
   void _showAlert() {
     Navigator.push(_buildcontext, MaterialPageRoute(builder: (context) {
       return Scaffold(
@@ -252,23 +253,31 @@ class _BasicSqlState extends State<BasicSql> {
             children: <Widget>[
           ...List.generate(
           contactList.length,
-          (index) => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-      "${contactList[index].name} - ${contactList[index].phoneNumber}- ${contactList[index].country}"),
-      ),),
-      ],
+                (index) => Card(
+                  color: Colors.white30,
+                  elevation: 3.0,
+                  child: ListTile(
+                  contentPadding: EdgeInsets.only(left:5.0),
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.yellow,
+                    child: Icon(Icons.keyboard_arrow_right),
+                  ),
+                  title: Text("${contactList[index].name}"),
+                  subtitle: Text("${contactList[index].phoneNumber}- ${contactList[index].country}"),
+                  ),
 
+                ),
+
+          ),
+            ],
           ),
         ),
       ),
 
 
-
-
-
       );
     }));
+
   }
 }
 
