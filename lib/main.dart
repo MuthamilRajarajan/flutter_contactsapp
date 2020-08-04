@@ -28,6 +28,7 @@ class _BasicSqlState extends State<BasicSql> {
 
   TextEditingController _name = TextEditingController();
   TextEditingController _phone = TextEditingController();
+
   TextEditingController _country = TextEditingController();
 
   GlobalKey<FormState> _form = GlobalKey<FormState>();
@@ -112,6 +113,11 @@ class _BasicSqlState extends State<BasicSql> {
                     onChanged: (value) {
                       setState(() {
                         _myActivity = value;
+                        if (value=="Home")
+                          return Icon(Icons.home);
+                        else
+                          return Icon(Icons.business);
+
                       });
                     },
                     dataSource: [
@@ -155,10 +161,11 @@ class _BasicSqlState extends State<BasicSql> {
                   onPressed: () {
                     if (_form.currentState.validate()) {
                       print("success");
-                      insertData(_name.text, _phone.text, _country.text);
+                      insertData(_name.text, _phone.text,_myActivity, _country.text);
                       _showAlert();
                       _name.clear();
                       _phone.clear();
+                      _myActivity;
                       _country.clear();
 
 
@@ -200,6 +207,7 @@ class _BasicSqlState extends State<BasicSql> {
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
             phone TEXT,
+            residence TEXT,
             country TEXT NOT NULL
             )
           ''',
@@ -212,6 +220,7 @@ class _BasicSqlState extends State<BasicSql> {
     getDataFromDb();
   }
 
+
   void getDataFromDb() async {
     List<Map> x = await _db.rawQuery("SELECT * FROM contacts");
 
@@ -220,18 +229,18 @@ class _BasicSqlState extends State<BasicSql> {
     setState(() {
       x.forEach((element) {
         ContactData contactData =
-        ContactData(element["id"], element["name"], element["phone"],element["country"]);
+        ContactData(element["id"], element["name"], element["phone"],element["residence"],element["country"]);
         contactList.add(contactData);
       });
     });
   }
 
-  void insertData(String name, String phoneNumber,String country) async {
+  void insertData(String name, String phoneNumber,String residence, String country) async {
     print(
-        "INSERT INTO contacts (name,phone,country) values ('${name.toUpperCase()}','$phoneNumber','$country')");
+        "INSERT INTO contacts (name,phone,residence,country) values ('${name.toUpperCase()}','$phoneNumber','$_myActivity','$country')");
 
     int n = await _db.rawInsert(
-        "INSERT INTO contacts (name,phone,country) values ('$name','$phoneNumber','$country')");
+        "INSERT INTO contacts (name,phone,residence,country) values ('$name','$phoneNumber','$_myActivity','$country')");
     print(n);
 
 //    List<Map> x = await _db.rawQuery("SELECT * FROM contacts");
@@ -285,8 +294,9 @@ class ContactData {
   int id;
   String name;
   String phoneNumber;
+  String residence;
   String country;
 
-  ContactData(this.id, this.name, this.phoneNumber,this.country);
+  ContactData(this.id, this.name, this.phoneNumber,this.residence,this.country);
 }
 
