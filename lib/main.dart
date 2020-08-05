@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import "package:path/path.dart";
 import "package:dropdown_formfield/dropdown_formfield.dart";
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,6 +26,7 @@ class _BasicSqlState extends State<BasicSql> {
 
   String _myActivity;
   String _myActivityResult;
+  String isOn = "Home";
 
   TextEditingController _name = TextEditingController();
   TextEditingController _phone = TextEditingController();
@@ -113,10 +115,8 @@ class _BasicSqlState extends State<BasicSql> {
                     onChanged: (value) {
                       setState(() {
                         _myActivity = value;
-                        if (value=="Home")
-                          return Icon(Icons.home);
-                        else
-                          return Icon(Icons.business);
+                        debugPrint("User Selected $value");
+
 
                       });
                     },
@@ -269,10 +269,10 @@ class _BasicSqlState extends State<BasicSql> {
                   contentPadding: EdgeInsets.only(left:5.0),
                   leading: CircleAvatar(
                     backgroundColor: Colors.yellow,
-                    child: Icon(Icons.keyboard_arrow_right),
+                    child: isOn ==  contactList[index].residence ? Icon(Icons.home) : Icon(Icons.business),
                   ),
                   title: Text("${contactList[index].name}"),
-                  subtitle: Text("${contactList[index].phoneNumber}- ${contactList[index].country}"),
+                  subtitle: Text("${contactList[index].phoneNumber}- ${contactList[index].country}- ${contactList[index].residence}"),
                   ),
 
                 ),
